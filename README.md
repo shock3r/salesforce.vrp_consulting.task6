@@ -1,88 +1,193 @@
-# salesforce.vrp_consulting.task6
-final task of the free vrp cource https://training-vrpconsulting.cs20.force.com/s/login/
+## Task 6. Контрольное задание
 
-Task 6. Контрольное задание
-Для выполнения задания необходимо создать новый Dev Org и настроить на нем Login IP Ranges. Для этого необходимо перейти в Setup > Profiles > System Administrator > Login IP Ranges > New > 0.0.0.0 – 255.255.255.255.
+# Для выполнения задания необходимо создать новый Dev Org и настроить
 
-Основное задание
-Создать объект, представляющий информацию о продукте.
-Label = Product Table
-Object Name = ProductTable
-Создать поля для объекта Product Table.
-Поле для хранения цены
-Type = Currency
-Label = Price
-Field Name = Price
-Поле для хранения количества товаров
-Type = Number
-Label = Amount
-Field Name = Amount
-Поле для хранения типа товара
-Type = Picklist
-Label = ProductType
-Field Name = ProductType
-Поле для хранения даты выпуска товара
-Type = Date
-Label = ReleaseDate
-Field Name = ReleaseDate
-Поле для хранения даты добавления товара
-Type = DateTime
-Label = AddedDate
-Field Name = AddedDate
-Поле определяющее доступен ли товар
-Type = Checkbox
-Label = Available
-Field Name = Available
-Создать триггер для нашего объекта и хелпер класс для триггера. Вся логика обработки должна быть написана в хелпере.
-Trigger Name = ProductTableTrigger
-Helper Class Name = ProductTableTriggerHelper
-Events = before insert/update
-Поле Available должно автоматически заполняться при создании или обновлении товара.
-Если поле Amount > 0, выставляем в true
-Если поле Amount <= 0, выставляем в false
-Поле AddedDate должно автоматически заполняться временем создания, при создании продукта
-Используйте класс Datetime, что бы заполнять это поле
-Создать 3 Validation Rule, которые будут контролировать правильность заполнения полей Amount, Price и Release Date
-1-й Validation Rule, Name = ValidateAmount
-Если поле Amount < 0, нужно показать сообщение об ошибке
-2-й Validation Rule, Name = ValidatePrice
-Если поле Price < 0, нужно показать сообщение об ошибке
-3-й Validation Rule, Name = ValidateReleaseDate
-Если поле Release Date позднее сегодняшней даты, нужно показать сообщение об ошибке
-Создать Aura Application – ProductTableApp.
-Создать Aura Component – ProductTableCmp. Компонента должна отображать список товаров в виде таблицы.
-Компонент должен использоваться в ProductTableApp
-В таблице обязательно должны быть колонки, расположенные в следующем порядке (имена колонок должны совпадать с теми, что указаны ниже):
-Name
-Amount
-Price
-Product Type
-Release Date
-Available
-Данные в таблице должны быть отсортированы по полю AddedDate так, что-бы недавно добавленные продукты были вверху списка.
-Создать Apex Class – ProductTableCmpController. Класс будет использоваться в качестве контроллера для нашего Aura Component.
-Класс должен обязательно содержать метод – getProducts. Метод будет возвращать список продуктов с нужными для отображения полями
-Расширить функционал компоненты так, чтобы были следующие возможности:
-Создавать товар
-Для этого обязательно надо добавить в контроллер метод insertNewProductTable
-Удалять товар из списка
-Для этого обязательно надо добавить в контроллер метод deleteProductTable
-Редактировать товар из списка
-Для этого обязательно надо добавить в контроллер метод updateNewProductTable
-Искать товар по части имени
-Расширить метод getProducts так, чтобы он возвращал либо все продукты, либо те, которые подходят по имени
-Создать Apex Tests для тестирования написанного кода. Общее покрытие должно быть не менее 75%.
-Name = TestProductTableApplication
-Класс должен покрывать тестами следующие классы:
-ProductTableTrigger
-ProductTableCmpController
+# на нем Login IP Ranges. Для этого необходимо перейти в Setup > Profiles >
 
-Задания для дополнительных балловДобавить к компоненте возможность сортировки списка товаров по полям:
-Name
-Added Date
-Release Date
-Price
-Расширить возможности поиска
-Поиск должен осуществляться по дате добавления
-Для поиска по обоим полям должен использоваться одно и то же поле ввода
-Добавить пагинацию, для навигации по списку товаров
+# System Administrator > Login IP Ranges > New > 0.0.0.0 – 255.255.255.255.
+
+# 1. Основное задание Создать объект, представляющий информацию о продукте.
+
+## 1. Label = Product Table
+
+## 2. Object Name = ProductTable
+
+## 2. Создать поля для объекта Product Table.
+
+## 1. Поле для хранения цены
+
+## 1. Type = Currency
+
+## 2. Label = Price
+
+## 3. Field Name = Price
+
+## 2. Поле для хранения количества товаров
+
+## 1. Type = Number
+
+## 2. Label = Amount
+
+## 3. Field Name = Amount
+
+## 3. Поле для хранения типа товара
+
+## 1. Type = Picklist
+
+## 2. Label = ProductType
+
+## 3. Field Name = ProductType
+
+## 4. Поле для хранения даты выпуска товара
+
+## 1. Type = Date
+
+## 2. Label = ReleaseDate
+
+## 3. Field Name = ReleaseDate
+
+## 5. Поле для хранения даты добавления товара
+
+## 1. Type = DateTime
+
+## 2. Label = AddedDate
+
+## 3. Field Name = AddedDate
+
+## 6. Поле определяющее доступен ли товар
+
+## 1. Type = Checkbox
+
+## 2. Label = Available
+
+## 3. Field Name = Available
+
+## 3. Создать триггер для нашего объекта и хелпер класс для триггера. Вся логика обработки
+
+## должна быть написана в хелпере.
+
+## 1. Trigger Name = ProductTableTrigger
+
+## 2. Helper Class Name = ProductTableTriggerHelper
+
+## 3. Events = before insert/update
+
+## 4. Поле Available должно автоматически заполняться при создании или обновлении товара.
+
+## 1. Если поле Amount > 0, выставляем в true
+
+## 2. Если поле Amount <= 0, выставляем в false
+
+## 5. Поле AddedDate должно автоматически заполняться временем создания, при создании
+
+## продукта
+
+## 1. Используйте класс Datetime, что бы заполнять это поле
+
+## 4. Создать 3 Validation Rule, которые будут контролировать правильность заполнения полей
+
+## Amount, Price и Release Date
+
+## 1. 1 - й Validation Rule, Name = ValidateAmount
+
+## 1. Если поле Amount < 0, нужно показать сообщение об ошибке
+
+
+## 2. 2 - й Validation Rule, Name = ValidatePrice
+
+## 1. Если поле Price < 0, нужно показать сообщение об ошибке
+
+## 3. 3 - й Validation Rule, Name = ValidateReleaseDate
+
+## 1. Если поле Release Date позднее сегодняшней даты, нужно показать сообщение об ошибке
+
+## 5. Создать Aura Application – ProductTableApp.
+
+## 6. Создать Aura Component – ProductTableCmp. Компонента должна отображать список
+
+## товаров в виде таблицы.
+
+## 1. Компонент должен использоваться в ProductTableApp
+
+## 2. В таблице обязательно должны быть колонки, расположенные в следующем порядке
+
+## (имена колонок должны совпадать с теми, что указаны ниже):
+
+## 1. Name
+
+## 2. Amount
+
+## 3. Price
+
+## 4. Product Type
+
+## 5. Release Date
+
+## 6. Available
+
+## 3. Данные в таблице должны быть отсортированы по полю AddedDate так, что-бы недавно
+
+## добавленные продукты были вверху списка.
+
+## 7. Создать Apex Class – ProductTableCmpController. Класс будет использоваться в качестве
+
+## контроллера для нашего Aura Component.
+
+## 1. Класс должен обязательно содержать метод – getProducts. Метод будет возвращать
+
+## список продуктов с нужными для отображения полями
+
+## 8. Расширить функционал компоненты так, чтобы были следующие возможности:
+
+## 1. Создавать товар
+
+## 1. Для этого обязательно надо добавить в контроллер метод insertNewProductTable
+
+## 2. Удалять товар из списка
+
+## 1. Для этого обязательно надо добавить в контроллер метод deleteProductTable
+
+## 3. Редактировать товар из списка
+
+## 1. Для этого обязательно надо добавить в контроллер метод updateNewProductTable
+
+## 4. Искать товар по части имени
+
+## 1. Расширить метод getProducts так, чтобы он возвращал либо все продукты, либо те,
+
+## которые подходят по имени
+
+## 9. Создать Apex Tests для тестирования написанного кода. Общее покрытие должно быть не
+
+## менее 75%.
+
+## 1. Name = TestProductTableApplication
+
+## 2. Класс должен покрывать тестами следующие классы:
+
+## 1. ProductTableTrigger
+
+## 2. ProductTableCmpController
+
+#  Задания для дополнительных баллов Добавить к компоненте возможность
+
+## сортировки списка товаров по полям:
+
+## o Name
+
+## o Added Date
+
+## o Release Date
+
+## o Price
+
+##  Расширить возможности поиска
+
+## o Поиск должен осуществляться по дате добавления
+
+
+## o Для поиска по обоим полям должен использоваться одно и то же поле ввода
+
+##  Добавить пагинацию, для навигации по списку товаров
+
+
