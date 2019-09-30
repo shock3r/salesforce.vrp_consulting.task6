@@ -1,0 +1,179 @@
+<aura:component controller="ProductTableCmpController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+	
+    <!-- attributes -->
+    <aura:attribute name="data" type="Object"/>
+    <!--<aura:attribute name="dataProductByID" type="Object"/>
+        <aura:attribute name="updateObjectID" type="ID"/> 
+	-->
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="isVisibleAdd" type="boolean" default="false"/>
+    <aura:attribute name="isVisibleUpdate" type="boolean" default="false"/>
+    <aura:attribute name="options" type="List" />
+    <aura:attribute name="selectedValue" type="String" default="Multimedia device"/>
+    <aura:attribute name="searchValue" type="String"/>
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:handler name="init" value="{!this}" action="{!c.loadOptions}" />
+    
+    <!-- filter field-->
+    <div class="row">
+        
+        <div class="row">
+            <lightning:input name="InputSearch" value="{!v.searchValue}" placeholder='For searching by "Added Date" field please use next format: "2019-09-29 20:24:39"' label="Seaching field"/>                                    
+        </div>
+        
+        <div class="slds-m-around_xx-small">
+        <lightning:button variant="brand"
+                              label="Search"
+                              title="Search"
+                              onclick="{!c.searchProduct}" />
+        </div>
+    </div>
+   	
+    <!-- Product table-->
+    <h2 class="header">Products table</h2>
+    <table class="slds-table slds-table--bordered slds-table--striped">
+        <thead>
+            <tr>
+                <!--<th scope="col"><span class="slds-truncate">Id</span></th>-->
+                <th scope="col"><span class="slds-truncate">Name</span></th>
+                <th scope="col"><span class="slds-truncate">Amount</span></th>
+                <th scope="col"><span class="slds-truncate">Price</span></th>
+                <th scope="col"><span class="slds-truncate">Product Type</span></th>
+                <th scope="col"><span class="slds-truncate">Release Date</span></th>       
+                <th scope="col"><span class="slds-truncate">Available</span></th>
+                <th scope="col"><span class="slds-truncate">Added Date</span></th>
+                <th scope="col"><span class="slds-truncate">Action</span></th>                
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration items="{!v.data}" var="data">
+                <tr>
+                   <!--<td>{!data.Id}</td>-->
+                    <td>{!data.Name}</td>
+                    <td>{!data.Amount__c}</td>
+                    <td>{!data.Price__c}</td>
+                    <td>{!data.ProductType__c}</td>
+                    <td>{!data.ReleaseDate__c}</td>
+                    <td><input type="checkbox" checked="{!data.Available__c}" disabled="disabled"/></td>                    
+                    <td>{!data.AddedDate__c}</td>
+                    <button class="slds-button slds-button_brand" onclick="{!c.updateProduct}" id="{!data.Id}">Update</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.deleteProduct}" id="{!data.Id}">Delete</button>                    
+                    
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table>
+    
+    <!-- Include Static Resource-->
+    <ltng:require styles="/resource/bootstrap/css/bootstrap.min.css"
+                  scripts="/resource/bootstrap/js/jquery.js,/resource/bootstrap/js/bootstrap.min.js"/>
+	
+    <!-- Define Attribute-->
+    <aura:attribute name="product" type="ProductTable__c" default="{'sobjectType': 'ProductTable__c',
+                                                                   'Id': '',
+                                                                   'Name': '',
+                                                                   'Amount__c': '',
+                                                                   'Price__c': '',
+                                                                   'ProductType__c': '',
+                                                                   'ReleaseDate__c': '',
+                                                                   'Available__c': '',
+                                                                   'AddedDate__c': ''
+                                                                   }"/>    
+    <!--use boolean attribute for Store true/false value,
+        make default to "false" so modal box are not display on the load of component.
+
+        <aura:attribute name="isOpen" type="boolean" default="false"/>
+         -->
+        <!--Use "slds-m-around_xx-large" class to add standard X-Large padding to the component-->
+        <div class="slds-m-around_xx-small">
+            
+            <lightning:button variant="brand"
+                              label="NEW"
+                              title="Add new product"
+                              onclick="{! c.openModel }" />
+			
+            <!--Use aura:if tag to display Model Box, on the bese of conditions. [isOpen boolean attribute] -->
+            <aura:if isTrue="{!v.isOpen}">
+
+                <!--###### MODAL BOX Start######-->
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <!-- ###### MODAL BOX HEADER Start ######-->
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close"
+                                                  onclick="{! c.closeModel }"
+                                                  alternativeText="close"
+                                                  variant="bare-inverse"
+                                                  class="slds-modal__close"/>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">ADD/Update product table</h2>
+                        </header>
+                        <!--###### MODAL BOX BODY Part Start######-->
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <div class="container-fluid">
+
+                                <div class="row">
+                                    <lightning:input name="inputName" value="{!v.product.Name}" placeholder="type product name..." label="Product name" />                                    
+                                </div>
+
+                                <div class="row">
+                                    <lightning:input type="number" name="inputAmount" value="{!v.product.Amount__c}" placeholder="type amount..." label="Product amount" />                                    
+                                </div>
+                                
+                                <div class="row">
+                                    <lightning:input type="number" name="inputPrice" value="{!v.product.Price__c}" placeholder="type price..." label="Product price" formatter="currency" step="0.01" />                                    
+                                </div>                       
+                                                                               
+                                <div class="row">
+                                    <lightning:select name="mySelect" label="select product price:" aura:id="mySelect" value="{!v.product.ProductType__c}">
+                                        <aura:iteration items="{!v.options}" var="item">
+                                            <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </div>                                
+                                                                 
+                                <div class="row">
+                                    <lightning:input type="date" name="inputReleaseDate" value="{!v.product.ReleaseDate__c}" placeholder="type release Date..." label="Release date" />                                    
+                                </div>
+                                                               
+                                <div class="row">
+                                    <lightning:input type="checkbox" name="Available" checked="{!v.product.Available__c}" label="Available" disabled="false"/>                                    
+                                </div>
+                                
+                                <div class="row">
+                                    <lightning:input type="datetime" name="inputAddedDate" value="{!v.product.AddedDate__c}" placeholder="type added date..." label="Added date" />                                    
+                                </div>
+								 
+                            </div>
+                           
+
+                        </div>
+                        <!--###### MODAL BOX FOOTER Part Start ######-->
+                        <footer class="slds-modal__footer">
+                            <lightning:button variant="neutral"
+                                              label="Cancel"
+                                              title="Cancel"
+                                              onclick="{! c.closeModel }"/>
+                            <aura:if isTrue="{!v.isVisibleAdd}">
+                            <lightning:button variant="brand"
+                                              label="Save"
+                                              title="Save"
+                                              onclick="{!c.insertProductData}"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.isVisibleUpdate}">
+                            <lightning:button variant="brand"
+                                              label="Update"
+                                              title="Update"
+                                              onclick="{!c.updateProductData}"/>
+                            </aura:if>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+                <!--###### MODAL BOX Part END Here ######-->
+            </aura:if>
+        </div>
+    
+</aura:component>
